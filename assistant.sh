@@ -22,7 +22,28 @@ elif [[ $1 == -d ]]; then
         echo Error invalid word
         exit 0
     fi
-    echo -e $curledDef
+    if curledDef=$(echo -e $curledDef | jq '.') && [ -n "$curledDef" ]; then
+
+        echo $curledDef | jq '.[0].word'
+        meanings=$(echo $curledDef | jq '.[0].meanings')
+
+        echo $meanings | jq '.[0].partOfSpeech'
+
+        def=$(echo $meanings | jq '.[].definitions')
+
+        echo $def | jq '.[].definition'
+        echo -n Synonyms: ;echo $meanings | jq '.[].synonyms'
+        echo -n Antonyms: ; echo $meanings | jq '.[].antonyms'
+
+        echo $curledDef | jq '.'
+    elif [ -z "$curledDef" ]; then
+
+        echo No definition found
+
+    else
+        echo Please install jq
+        exit 0
+    fi
 
     # If there is no definition then echo not found
     #echo Define
