@@ -48,7 +48,7 @@ elif [[ $1 == -d ]]; then
     # If there is no definition then echo not found
     #echo Define
 
-elif [[ "$1" == "-s" ]]; then
+elif [[ "$1" == "-t" ]]; then
     # Increment a timer and take into account converting seconds to minutes
     # minutes to hours etc.
     if [[ $2 =~ ^-?[0-9]+$  ]]; then
@@ -72,7 +72,7 @@ elif [[ "$1" == "-s" ]]; then
 
     fi
 
-elif [[ $1 == "-t" ]]; then
+elif [[ $1 == "-s" ]]; then
 
     SEC=0
     MIN=0
@@ -94,5 +94,27 @@ elif [[ $1 == "-t" ]]; then
     HR=` expr $HR + 1`
 
     echo timer
+elif [[ $1 == "-w" ]]; then
+    echo Write
+
+elif [[ $1 == "-r" ]]; then
+    echo Read
+
+elif [[ $1 == "-su" ]]; then
+    echo Setup
+
+elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+    nm=$(basename $0)
+    printf "%s\n\n" "usage: $nm [-h] [-r] [-s] [-su] [-t MINUTES]  [-c EQUATION] [-d WORD] [-w GOAL]"
+    printf "%s\n\n" "Use a plethora of tools to help you on the command line with Bash Assistant. Please use only one argument, otherwise, Bash Assistant will not work."
+    printf "%s\n" "options:"
+    printf "%-10s\t%s\n"  "-c EQUATION" "Solves equation"
+    printf "%-10s\t%s\n" "-d WORD" "Finds the first definition of the given word"
+    printf "%-10s\t%s\n" "-h, --help" "This help message"
+    printf "%-10s\t%s\n" "-r" "Read your TODO list"
+    printf "%-10s\t%s\n" "-s" "Starts a stopwatch"
+    printf "%-10s\t%s\n" "-su" "Setup the TODO list"
+    printf "%-10s\t%s\n" "-t MINUTES" "Start a time with a number of minutes"
+    printf "%-10s\t%s\n" "-w GOAL" "Write a goal to your TODO list"
 
 fi
