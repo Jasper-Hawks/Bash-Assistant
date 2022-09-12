@@ -1,5 +1,6 @@
 #!/bin/bash
 
+NUMOFLINES=$(wc -l < $TODOFILE)
 if [[ "$1" == "-c" ]]; then
     # Make a variable for the equation the user submitted
     exp=$2
@@ -95,17 +96,50 @@ elif [[ $1 == "-s" ]]; then
 
     echo timer
 elif [[ $1 == "-w" ]]; then
-    echo Write
-
+    if [[ -n $TODOFILE ]]; then
+        NUM=$(echo $NUMOFLINES+1 | bc)
+        echo $NUM. $2 >> "$TODOFILE"
+    else
+        echo Please setup your TODO file with the -su flag
+    fi
 elif [[ $1 == "-r" ]]; then
-    echo Read
+    if [[ -n $TODOFILE ]]; then
+        cat $TODOFILE
+    else
+        echo Please setup your TODO file with the -su flag
+    fi
+
+elif [[ $1 == "-rm" ]]; then
+    if [[ $2 -le $NUMOFLINES ]]; then
+        sed -i $2d $TODOFILE
+        NUMOFLINES=$(wc -l < $TODOFILE)
+        for (( i = 1; i<=$NUMOFLINES ; i++ ));
+        do
+            sed -i ""$i"s/^[0-9]*/$i/" $TODOFILE
+        done
+
+    elif [[ $2 -gt $NUMOFLINES ]] || [[ $2 -le 0 ]]; then
+        echo Please enter a valid line
+    else
+        echo Please setup your TODO file with the -su flag
+    fi
 
 elif [[ $1 == "-su" ]]; then
-    echo Setup
+    if [[ -n $2 ]]; then
+        mkdir -p $2
+        # TODO Check if the var ends with a /
+#        touch $2/TODO.md
+#        TODOFILE=$2/TODO.md
+#        export $TODOFILE
+    else
+        echo Please specify a directory
+    fi
+
 
 elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+    #TODO Add additional flags like rm
     nm=$(basename $0)
-    printf "%s\n\n" "usage: $nm [-h] [-r] [-s] [-su] [-t MINUTES]  [-c EQUATION] [-d WORD] [-w GOAL]"
+    printf "%s\n\n" "usage: $nm [-h] [-r] [-s] [-su FILEPATH] [-t MINUTES]  [-c EQUATION] [-d WORD] [-w GOAL]"
     printf "%s\n\n" "Use a plethora of tools to help you on the command line with Bash Assistant. Please use only one argument, otherwise, Bash Assistant will not work."
     printf "%s\n" "options:"
     printf "%-10s\t%s\n"  "-c EQUATION" "Solves equation"
@@ -113,7 +147,7 @@ elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
     printf "%-10s\t%s\n" "-h, --help" "This help message"
     printf "%-10s\t%s\n" "-r" "Read your TODO list"
     printf "%-10s\t%s\n" "-s" "Starts a stopwatch"
-    printf "%-10s\t%s\n" "-su" "Setup the TODO list"
+    printf "%-10s\t%s\n" "-su FILEPATH" "Setup the TODO list"
     printf "%-10s\t%s\n" "-t MINUTES" "Start a time with a number of minutes"
     printf "%-10s\t%s\n" "-w GOAL" "Write a goal to your TODO list"
 
