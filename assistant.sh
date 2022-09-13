@@ -1,6 +1,5 @@
 #!/bin/bash
 
-NUMOFLINES=$(wc -l < $TODOFILE)
 if [[ "$1" == "-c" ]]; then
     # Make a variable for the equation the user submitted
     exp=$2
@@ -36,7 +35,6 @@ elif [[ $1 == -d ]]; then
         echo -n Synonyms: ;echo $meanings | jq '.[].synonyms'
         echo -n Antonyms: ; echo $meanings | jq '.[].antonyms'
 
-        echo $curledDef | jq '.'
     elif [ -z "$curledDef" ]; then
 
         echo No definition found
@@ -45,9 +43,6 @@ elif [[ $1 == -d ]]; then
         echo Please install jq
         exit 0
     fi
-
-    # If there is no definition then echo not found
-    #echo Define
 
 elif [[ "$1" == "-t" ]]; then
     # Increment a timer and take into account converting seconds to minutes
@@ -94,7 +89,6 @@ elif [[ $1 == "-s" ]]; then
     MIN=0
     HR=` expr $HR + 1`
 
-    echo timer
 elif [[ $1 == "-w" ]]; then
     if [[ -n $TODOFILE ]]; then
         NUM=$(echo $NUMOFLINES+1 | bc)
@@ -127,25 +121,31 @@ elif [[ $1 == "-rm" ]]; then
 elif [[ $1 == "-su" ]]; then
     if [[ -n $2 ]]; then
         mkdir -p $2
-        # TODO Check if the var ends with a /
-#        touch $2/TODO.md
-#        TODOFILE=$2/TODO.md
-#        export $TODOFILE
+        if  echo "$2" | grep -q "/$"
+        then
+            echo Please insert this into your .bashrc \"export TODOFILE="$2"TODO.md\"
+            echo Please insert this into your .bashrc \"export NUMOFLINES=\$\(\w\c \-\l \< \$TODOFILE\)\"
+            touch $2TODO.md
+        else
+            echo Please insert this into your .bashrc "export TODOFILE="$2"/TODO.md"
+            echo Please insert this into your .bashrc \"export NUMOFLINES=\$\(\w\c \-\l \< \$TODOFILE\)\"
+            touch $2/TODO.md
+        fi
     else
         echo Please specify a directory
     fi
 
 
 elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
-    #TODO Add additional flags like rm
     nm=$(basename $0)
-    printf "%s\n\n" "usage: $nm [-h] [-r] [-s] [-su FILEPATH] [-t MINUTES]  [-c EQUATION] [-d WORD] [-w GOAL]"
-    printf "%s\n\n" "Use a plethora of tools to help you on the command line with Bash Assistant. Please use only one argument, otherwise, Bash Assistant will not work."
+    printf "%s\n\n" "usage: $nm [-h] [-r] [-s] [-su FILEPATH] [-t MINUTES]  [-c EQUATION] [-d WORD] [-rm LINENUMBER] [-w GOAL]"
+    printf "%s\n\n" "Use a plethora of tools to help you on the command line with Bash Assistant."
     printf "%s\n" "options:"
     printf "%-10s\t%s\n"  "-c EQUATION" "Solves equation"
     printf "%-10s\t%s\n" "-d WORD" "Finds the first definition of the given word"
     printf "%-10s\t%s\n" "-h, --help" "This help message"
     printf "%-10s\t%s\n" "-r" "Read your TODO list"
+    printf "%-10s\t%s\n" "-rm LINENUMBER" "Remove selected line from the TODO list"
     printf "%-10s\t%s\n" "-s" "Starts a stopwatch"
     printf "%-10s\t%s\n" "-su FILEPATH" "Setup the TODO list"
     printf "%-10s\t%s\n" "-t MINUTES" "Start a time with a number of minutes"
