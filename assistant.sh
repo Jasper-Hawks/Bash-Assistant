@@ -90,8 +90,9 @@ elif [[ $1 == "-s" ]]; then
     HR=` expr $HR + 1`
 
 elif [[ $1 == "-w" ]]; then
+    NUMOFLINES=$(wc -l < $TODOFILE)
     if [[ -n $TODOFILE ]]; then
-        NUM=$(echo $NUMOFLINES+1 | bc)
+        NUM=$( echo "$NUMOFLINES + 1" | bc )
         echo $NUM. $2 >> "$TODOFILE"
     else
         echo Please setup your TODO file with the -su flag
@@ -104,9 +105,9 @@ elif [[ $1 == "-r" ]]; then
     fi
 
 elif [[ $1 == "-rm" ]]; then
+    NUMOFLINES=$(wc -l < $TODOFILE)
     if [[ $2 -le $NUMOFLINES ]]; then
         sed -i $2d $TODOFILE
-        NUMOFLINES=$(wc -l < $TODOFILE)
         for (( i = 1; i<=$NUMOFLINES ; i++ ));
         do
             sed -i ""$i"s/^[0-9]*/$i/" $TODOFILE
@@ -151,4 +152,6 @@ elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
     printf "%-10s\t%s\n" "-t MINUTES" "Start a time with a number of minutes"
     printf "%-10s\t%s\n" "-w GOAL" "Write a goal to your TODO list"
 
+else
+    echo Please enter a valid argument.
 fi
