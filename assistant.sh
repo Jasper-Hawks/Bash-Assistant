@@ -153,5 +153,5 @@ elif [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
     printf "%-10s\t%s\n" "-w GOAL" "Write a goal to your TODO list"
 
 else
-    echo Please enter a valid argument.
+    echo Please enter one valid argument.
 fi

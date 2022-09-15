@@ -6,7 +6,7 @@ Bash Assistant works out of the box with the only dependencie being jq if you wo
 
 ## Usage
 ```
-usage: Bash [-h] [-r] [-s] [-su FILEPATH] [-t MINUTES]  [-c EQUATION] [-d WORD] [-rm LINENUMBER] [-w GOAL]
+usage: ba [-h] [-r] [-s] [-su FILEPATH] [-t MINUTES]  [-c EQUATION] [-d WORD] [-rm LINENUMBER] [-w GOAL]
 
 Use a plethora of tools to help you on the command line with Bash Assistant.
 
