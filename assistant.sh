@@ -125,11 +125,9 @@ elif [[ $1 == "-su" ]]; then
         if  echo "$2" | grep -q "/$"
         then
             echo Please insert this into your .bashrc \"export TODOFILE="$2"TODO.md\"
-            echo Please insert this into your .bashrc \"export NUMOFLINES=\$\(\w\c \-\l \< \$TODOFILE\)\"
             touch $2TODO.md
         else
             echo Please insert this into your .bashrc "export TODOFILE="$2"/TODO.md"
-            echo Please insert this into your .bashrc \"export NUMOFLINES=\$\(\w\c \-\l \< \$TODOFILE\)\"
             touch $2/TODO.md
         fi
     else
