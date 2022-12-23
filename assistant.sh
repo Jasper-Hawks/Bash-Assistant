@@ -5,7 +5,7 @@ if [[ "$1" == "-c" ]]; then
     exp=$2
 
     # We can't pipe the variable into bc without echoing it first
-    sol=$(echo 'scale=2;' $2 | bc)
+    sol=$(echo 'scale=2;' $2 | bc) || echo -n 'Please install bc using your package manager'
     echo $sol
 
 elif [[ $1 == -d ]]; then
@@ -14,7 +14,7 @@ elif [[ $1 == -d ]]; then
     word=$2
 
     # Use cURL with a dictionary API in order to find the definition
-    curledDef=$(curl -s "https://api.dictionaryapi.dev/api/v2/entries/en/$2")
+    curledDef=$(curl -s "https://api.dictionaryapi.dev/api/v2/entries/en/$2") || echo -n 'Please make sure you are connected to the internet'
 
     if [[ $curledDef =~ title ]]; then
         # Since only undefineable words have title headers
